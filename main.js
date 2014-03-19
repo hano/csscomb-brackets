@@ -8,11 +8,14 @@ define(function( require, exports, module ) {
     var Commands = brackets.getModule("command/Commands");
     var CommandManager = brackets.getModule("command/CommandManager");
     var Menus = brackets.getModule("command/Menus");
-    var ProjectManager = brackets.getModule("project/ProjectManager")
+    var ProjectManager = brackets.getModule("project/ProjectManager");
 
     // Strings
     var Strings = require("strings");
     var BracketsStrings = brackets.getModule("strings");
+
+    // NODE BRIDGE
+    var nodeBridge = require("node/nodebridge");
 
     // CONSTS
     var CSS_COMP_BRACKETS_RUN = 'csscomb.brackets.run'
@@ -40,8 +43,17 @@ define(function( require, exports, module ) {
      * Call the CSScomp node script
      */
     function runCssComp() {
+        var dfd = $.Deferred();
         var file = ProjectManager.getSelectedItem();
-        console.log(file);
+
+        nodeBridge.processString('a { top: 0; color: tomato; background: red; }', function(err, resp) {
+            if(err){
+                console.log(err);
+                return;
+            }
+            console.log(resp);
+        });
+        return dfd.promise();
     }
 
     // INIT
@@ -50,4 +62,6 @@ define(function( require, exports, module ) {
     // API
     exports.runCssComp = runCssComp;
 
+
+    brackets.app.showDeveloperTools();
 });

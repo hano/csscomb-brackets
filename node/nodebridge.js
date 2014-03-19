@@ -10,7 +10,7 @@ define(function( require, exports, module ) {
     function processString( cssString, cb ) {
         runNode(function() {
 
-          var promise = nodeConnection.domains.comb.processString(cssString);
+            var promise = nodeConnection.domains.comb.processString(cssString);
             promise.fail(function( err ) {
                 cb(err);
             });
@@ -24,16 +24,17 @@ define(function( require, exports, module ) {
     function processPath( path, cb ) {
         runNode(function() {
 
-          var promise = nodeConnection.domains.comb.processPath(path);
+            var promise = nodeConnection.domains.comb.processPath(path);
             promise.fail(function( err ) {
                 cb(err);
             });
-            promise.done(function() {
-                cb(null);
+            promise.done(function(data) {
+                cb(null, data);
             });
             return promise;
         });
     };
+
 
     function runNode( nodeFunc ) {
 
@@ -48,7 +49,7 @@ define(function( require, exports, module ) {
         };
 
         function loadDomain() {
-            var path = ExtensionUtils.getModulePath(module, "./node/comb");
+            var path = ExtensionUtils.getModulePath(module, "./comb");
             var promise = nodeConnection.loadDomains([path], true);
             promise.fail(function( err ) {
                 console.log("[brackets-node] Failed to load domain. Error:", err);
@@ -70,6 +71,6 @@ define(function( require, exports, module ) {
         chain(connect, loadDomain, nodeFunc);
     };
 
-    exports.processString = processString;
     exports.processPath = processPath;
+    exports.processString = processString;
 });

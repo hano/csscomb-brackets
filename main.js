@@ -8,6 +8,7 @@ define(function( require, exports, module ) {
     var Commands = brackets.getModule("command/Commands");
     var CommandManager = brackets.getModule("command/CommandManager");
     var Menus = brackets.getModule("command/Menus");
+    var ProjectManager = brackets.getModule("project/ProjectManager")
 
     // Strings
     var Strings = require("strings");
@@ -39,7 +40,8 @@ define(function( require, exports, module ) {
      * Call the CSScomp node script
      */
     function runCssComp() {
-        console.log('hello');
+        var file = ProjectManager.getSelectedItem();
+        console.log(file);
     }
 
     // INIT

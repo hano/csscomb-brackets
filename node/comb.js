@@ -1,8 +1,9 @@
 (function() {
     "use strict";
 
-    function processPath( path, cb ) {
+    var Comb = require('csscomb');
 
+    function processPath( path, cb ) {
         var comb = new Comb();
         var result = comb.processPath(path);
         cb(result);

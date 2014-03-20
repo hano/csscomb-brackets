@@ -21,7 +21,17 @@ You can use the plugin in three different ways:
 The statusbar will update the tooltip if something happens. Just hold you mouse a while over the icon in the statusbar.
 
  
+## Installation
 
+In Brackets -> File -> Extension Manager... search for `CSScomb Brackets plugin`
+
+```
+// mac
+cd /Users/you/Library/Application Support/Brackets/extensions/user/
+git clone https://github.com/hano/csscomb-brackets.git
+cd csscomb-brackets
+npm install
+```
 
 ## Version
 

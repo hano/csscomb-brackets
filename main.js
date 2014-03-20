@@ -57,7 +57,7 @@ define(function( require, exports, module ) {
 
         // register Edit -> CSScomb
         editMenu.addMenuDivider();
-        editMenu.addMenuItem(CSS_COMP_BRACKETS_RUN_INLINE, null, Menus.AFTER);
+        editMenu.addMenuItem(CSS_COMP_BRACKETS_RUN_INLINE, "Cmd-alt-c", Menus.AFTER);
     }
 
     /**

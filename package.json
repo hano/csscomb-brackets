@@ -1,15 +1,20 @@
 {
     "name": "csscomb-brackets",
     "title": "CSScomb Brackets plugin",
-    "description": "https://github.com/csscomb/csscomb.js plugin for Brackets.",
-    "homepage": "https://github.com/hano/csscomb-brackets",
     "version": "0.0.1",
-    "author": "Marco Hanowski, Stefan Buck",
-    "license": "MIT",
-    "engines": {
-        "brackets": ">=0.37.0"
-    },
+    "description": "https://github.com/csscomb/csscomb.js plugin for Brackets.",
+    "author": "Marco Hanowski and Stefan Buck <its@time2dev.com>",
     "dependencies": {
         "csscomb": "2.0.4"
+    },
+    "devDependencies": {
+    },
+    "engines": {
+        "node": ">0.9",
+        "brackets": ">=0.37.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hano/csscomb-brackets.git"
     }
 }

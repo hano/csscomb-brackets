@@ -29,6 +29,7 @@
 define({
 
     'CSS_COMP': 'CSScomb',
+    'UPDATED': 'Updated',
 
     '':''
 });

@@ -2,7 +2,7 @@
 /*global define, brackets, window, $, Mustache, navigator */
 
 define(function( require, exports, module ) {
-    "use strict";
+    //"use strict";
 
     // Brackets Modules
     var Commands = brackets.getModule("command/Commands");
@@ -11,6 +11,9 @@ define(function( require, exports, module ) {
     var ProjectManager = brackets.getModule("project/ProjectManager");
     var EditorManager = brackets.getModule("editor/EditorManager");
     var DocumentManager = brackets.getModule("document/DocumentManager")
+    StatusBar = brackets.getModule("widgets/StatusBar");
+    var ExtensionUtils = brackets.getModule("utils/ExtensionUtils");
+    ExtensionUtils.loadStyleSheet(module, "css/style.css");
 
     // Strings
     var Strings = require("strings");
@@ -22,6 +25,7 @@ define(function( require, exports, module ) {
     // CONSTS
     var CSS_COMP_BRACKETS_RUN = 'csscomb.brackets.run'
     var CSS_COMP_BRACKETS_RUN_INLINE = 'csscomb.brackets.run.inline'
+    INDICATOR_ID = "csscomb-status-validation";
 
     // MENUS
     var editMenu = Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
@@ -65,9 +69,11 @@ define(function( require, exports, module ) {
 
         nodeBridge.processPath(file._path, function( err, resp ) {
             if( err ) {
+                StatusBar.updateIndicator(INDICATOR_ID, true, "inspection-errors", err);
                 dfd.reject(err);
                 return;
             }
+            StatusBar.updateIndicator(INDICATOR_ID, true, "inspection-valid", Strings.UPDATED + ' ' + file._path);
             dfd.resolve(resp);
         });
         return dfd.promise();
@@ -82,11 +88,11 @@ define(function( require, exports, module ) {
         var dfd = $.Deferred();
         nodeBridge.processString(text, function( err, resp ) {
             if( err ) {
-                console.log(err);
+                StatusBar.updateIndicator(INDICATOR_ID, true, "inspection-errors", err);
                 dfd.reject(err);
                 return;
             }
-            console.log(resp);
+            StatusBar.updateIndicator(INDICATOR_ID, true, "inspection-valid", Strings.UPDATED + ' ' + resp);
             dfd.resolve(resp);
         });
         return dfd.promise();
@@ -116,8 +122,18 @@ define(function( require, exports, module ) {
         }
     }
 
+    /**
+     * Setup plugin
+     * @private
+     */
+    function _init() {
+        _registerMenuEntries();
+        var statusIconHtml = Mustache.render("<div id=\"csscomb-status-validation\">&nbsp;</div>", Strings);
+        StatusBar.addIndicator(INDICATOR_ID, $(statusIconHtml), true, "", "CSScomb", "status-indent");
+    }
+
     // INIT
-    _registerMenuEntries();
+    _init();
 
     // API
     exports.processPath = processPath;

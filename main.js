@@ -35,7 +35,6 @@ define(function( require, exports, module ) {
 
         // register menu entry for secondary click on sidebar
         CommandManager.register(Strings.CSS_COMP, CSS_COMP_BRACKETS_RUN, runCssComp);
-        contextMenu.addMenuDivider();
         contextMenu.addMenuItem(CSS_COMP_BRACKETS_RUN);
     }
 
@@ -45,13 +44,11 @@ define(function( require, exports, module ) {
     function runCssComp() {
         var dfd = $.Deferred();
         var file = ProjectManager.getSelectedItem();
-
-        nodeBridge.processString('a { top: 0; color: tomato; background: red; }', function(err, resp) {
-            if(err){
+        nodeBridge.processPath(file._path, function( err, resp ) {
+            if( err ) {
                 console.log(err);
                 return;
             }
-            console.log(resp);
         });
         return dfd.promise();
     }
@@ -63,5 +60,5 @@ define(function( require, exports, module ) {
     exports.runCssComp = runCssComp;
 
 
-    brackets.app.showDeveloperTools();
+    //brackets.app.showDeveloperTools();
 });

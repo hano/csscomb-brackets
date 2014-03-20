@@ -4,7 +4,7 @@
     var CSScomp = require('../node_modules/csscomb/lib/csscomb');
 
     function processPath( path, cb ) {
-        var comb = new CSScomp({ 'always-semicolon': true });
+        var comb = new CSScomp('zen');
         var result = comb.processPath(path);
         cb(null, result);
     }

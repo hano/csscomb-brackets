@@ -9,6 +9,8 @@ define(function( require, exports, module ) {
     var CommandManager = brackets.getModule("command/CommandManager");
     var Menus = brackets.getModule("command/Menus");
     var ProjectManager = brackets.getModule("project/ProjectManager");
+    var EditorManager = brackets.getModule("editor/EditorManager");
+    var DocumentManager = brackets.getModule("document/DocumentManager")
 
     // Strings
     var Strings = require("strings");
@@ -19,45 +21,107 @@ define(function( require, exports, module ) {
 
     // CONSTS
     var CSS_COMP_BRACKETS_RUN = 'csscomb.brackets.run'
+    var CSS_COMP_BRACKETS_RUN_INLINE = 'csscomb.brackets.run.inline'
 
     // MENUS
     var editMenu = Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
-    var contextMenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
+    var workingSetMenu = Menus.getContextMenu(Menus.ContextMenuIds.WORKING_SET_MENU);
+    var projectMenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
+    var inlineEditorMenu = Menus.getContextMenu(Menus.ContextMenuIds.INLINE_EDITOR_MENU);
+    var editorMenu = Menus.getContextMenu(Menus.ContextMenuIds.EDITOR_MENU);
+
 
     /**
      * Register menu entries
      */
     function _registerMenuEntries() {
-        // register Edit -> CSScomb
-        CommandManager.register(Strings.CSS_COMP, CSS_COMP_BRACKETS_RUN, runCssComp);
-        contextMenu.addMenuDivider();
-        editMenu.addMenuItem(CSS_COMP_BRACKETS_RUN, null, Menus.AFTER, Commands.FILE_NEW_UNTITLED);
+        // Run on full path or file
+        CommandManager.register(Strings.CSS_COMP, CSS_COMP_BRACKETS_RUN, processPath);
 
         // register menu entry for secondary click on sidebar
-        CommandManager.register(Strings.CSS_COMP, CSS_COMP_BRACKETS_RUN, runCssComp);
-        contextMenu.addMenuItem(CSS_COMP_BRACKETS_RUN);
+        workingSetMenu.addMenuDivider();
+        workingSetMenu.addMenuItem(CSS_COMP_BRACKETS_RUN);
+
+        projectMenu.addMenuDivider();
+        projectMenu.addMenuItem(CSS_COMP_BRACKETS_RUN);
+
+        // Check first on selected text - if none run on full path or file
+        // register menu entry for inline editing in editor
+        CommandManager.register(Strings.CSS_COMP, CSS_COMP_BRACKETS_RUN_INLINE, processSelectedText);
+        editorMenu.addMenuDivider();
+        editorMenu.addMenuItem(CSS_COMP_BRACKETS_RUN_INLINE);
+
+        // register Edit -> CSScomb
+        editMenu.addMenuDivider();
+        editMenu.addMenuItem(CSS_COMP_BRACKETS_RUN_INLINE, null, Menus.AFTER);
     }
 
     /**
-     * Call the CSScomp node script
+     * Call the CSScomp node script on a path or file
      */
-    function runCssComp() {
+    function processPath() {
         var dfd = $.Deferred();
         var file = ProjectManager.getSelectedItem();
+
         nodeBridge.processPath(file._path, function( err, resp ) {
             if( err ) {
-                console.log(err);
+                dfd.reject(err);
                 return;
             }
+            dfd.resolve(resp);
         });
         return dfd.promise();
+    }
+
+    /**
+     * call CSScomb node processString with the given text
+     * @param text
+     * @returns {*}
+     */
+    function processString( text ) {
+        var dfd = $.Deferred();
+        nodeBridge.processString(text, function( err, resp ) {
+            if( err ) {
+                console.log(err);
+                dfd.reject(err);
+                return;
+            }
+            console.log(resp);
+            dfd.resolve(resp);
+        });
+        return dfd.promise();
+    }
+
+    /**
+     * Get the current selected text and CSScomb it. If no text is selected process the file or folder
+     */
+    function processSelectedText() {
+
+        var editor = EditorManager.getCurrentFullEditor();
+        var selectedText = editor.getSelectedText();
+        // get the current document
+        var doc = DocumentManager.getCurrentDocument();
+        // get the current text selection
+        var selection = editor.getSelection();
+
+        // if there is a text selection
+        if( selectedText.length > 0 ) {
+            // try to CSScomb it
+            processString(selectedText).then(function( text ) {
+                doc.replaceRange(text, selection.start, selection.end);
+            });
+        } else {
+            // otherwise try to process the current file or folder
+            processPath();
+        }
     }
 
     // INIT
     _registerMenuEntries();
 
     // API
-    exports.runCssComp = runCssComp;
+    exports.processPath = processPath;
+    exports.processSelectedText = processSelectedText;
 
 
     //brackets.app.showDeveloperTools();

@@ -2,7 +2,7 @@
     "name": "csscomb-brackets",
     "title": "CSScomb Brackets plugin",
     "description": "https://github.com/csscomb/csscomb.js plugin for Brackets.",
-    "homepage": "",
+    "homepage": "https://github.com/hano/csscomb-brackets",
     "version": "0.0.1",
     "author": "Marco Hanowski, Stefan Buck",
     "license": "MIT",

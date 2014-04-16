@@ -2,7 +2,7 @@
 /*global define, brackets, window, $, Mustache, navigator */
 
 define(function( require, exports, module ) {
-    //"use strict";
+    "use strict";
 
     // Brackets Modules
     var Commands = brackets.getModule("command/Commands");
@@ -10,28 +10,28 @@ define(function( require, exports, module ) {
     var Menus = brackets.getModule("command/Menus");
     var ProjectManager = brackets.getModule("project/ProjectManager");
     var EditorManager = brackets.getModule("editor/EditorManager");
-    var DocumentManager = brackets.getModule("document/DocumentManager")
-    StatusBar = brackets.getModule("widgets/StatusBar");
+    var DocumentManager = brackets.getModule("document/DocumentManager");
+    var StatusBar = brackets.getModule("widgets/StatusBar");
     var ExtensionUtils = brackets.getModule("utils/ExtensionUtils");
     ExtensionUtils.loadStyleSheet(module, "css/style.css");
 
     // Strings
     var Strings = require("strings");
-    var BracketsStrings = brackets.getModule("strings");
+//    var BracketsStrings = brackets.getModule("strings");
 
     // NODE BRIDGE
     var nodeBridge = require("node/nodebridge");
 
     // CONSTS
-    var CSS_COMP_BRACKETS_RUN = 'csscomb.brackets.run'
-    var CSS_COMP_BRACKETS_RUN_INLINE = 'csscomb.brackets.run.inline'
-    INDICATOR_ID = "csscomb-status-validation";
+    var CSS_COMP_BRACKETS_RUN = 'csscomb.brackets.run';
+    var CSS_COMP_BRACKETS_RUN_INLINE = 'csscomb.brackets.run.inline';
+    var INDICATOR_ID = "csscomb-status-validation";
 
     // MENUS
     var editMenu = Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
     var workingSetMenu = Menus.getContextMenu(Menus.ContextMenuIds.WORKING_SET_MENU);
     var projectMenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
-    var inlineEditorMenu = Menus.getContextMenu(Menus.ContextMenuIds.INLINE_EDITOR_MENU);
+//    var inlineEditorMenu = Menus.getContextMenu(Menus.ContextMenuIds.INLINE_EDITOR_MENU);
     var editorMenu = Menus.getContextMenu(Menus.ContextMenuIds.EDITOR_MENU);
 
 

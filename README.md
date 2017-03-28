@@ -1,5 +1,8 @@
 # CSScomb Brackets plugin
 
+## NOTICE
+Currently I have no time to maintain this repository. Feel free to fork. If you want to become the owner just contact me.
+
 Implementation of [CSScomp](https://github.com/csscomb/csscomb.js) for [Brackets](https://github.com/adobe/brackets). Credits to [CSScomb](https://github.com/csscomb) - thanks for the great work.
 
 ## Usage
